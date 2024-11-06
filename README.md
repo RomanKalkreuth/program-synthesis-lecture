@@ -25,6 +25,7 @@ Dr. Roman Kalkreuth Assistant Professor (Akademischer Rat)
 
 ## Contact
 
-RWTH Chair for AI Methodology
+Chair for AI Methodology
+RWTH Aachen University
 Theaterstraße 35-39
-52062 Aachen 
+52062 Aachen (Germany)
