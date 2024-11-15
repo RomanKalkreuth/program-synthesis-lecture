@@ -1,10 +1,10 @@
-/* ------------------------------------------------------------------- */
-/* C implementation of a nested list to represent symbolic expressions */
-/*                                                                     */
-/* Introduction to Program Synthesis Lecture                           */
-/*                                                                     */
-/* Author: Roman Kalkreuth                                             */
-/* ------------------------------------------------------------------- */
+/* ------------------------------------------------------------------------ */
+/* C99 implementation of a nested list to represent symbolic expressions    */
+/*                                                                          */
+/* Introduction to Program Synthesis Lecture (Chapter 02 - Foundations)     */
+/*                                                                          */
+/* Author: Roman Kalkreuth                                                  */
+/* ------------------------------------------------------------------------ */
 
 #include <stdio.h>
 #include <stdlib.h> 
@@ -14,10 +14,9 @@
 struct Node* create_list(char* symbols, int *x, bool init_head);
 struct Node* create_node(char symbol);
 void append_node(struct Node* tail, char symbol);
-void nest_node(struct Node* node, struct Node* sublist);
+void nest_node(struct Node* node_ptr, struct Node* sublist, bool append);
 void remove_list(struct Node *head);
 void traverse(struct Node* head);
-
 
 struct Node{
     char symbol;
@@ -30,6 +29,8 @@ struct Node* create_list(char* symbols, int* x, bool init_head) {
     struct Node* head = NULL;
     struct Node* node_ptr = NULL;
     struct Node* subhead = NULL;
+
+    bool append_nesting = true;
 
     if(init_head) {
         head = (struct Node*) malloc(sizeof(struct Node));
@@ -49,7 +50,8 @@ struct Node* create_list(char* symbols, int* x, bool init_head) {
                     head = subhead;
                     node_ptr = head;
                 } else {
-                    nest_node(node_ptr, subhead);
+                    nest_node(node_ptr, subhead, append_nesting);
+                    node_ptr = node_ptr->next; 
                 }
             } else if (s == ')') {
                 break;
@@ -82,8 +84,13 @@ void append_node(struct Node* tail, char symbol) {
     tail->next = node;
 }
 
-void nest_node(struct Node* node, struct Node* sublist) {
-    node->nesting = sublist;
+void nest_node(struct Node* node_ptr, struct Node* sublist, bool append) {
+    if (append){
+        struct Node* new_node = create_node('\0');
+        node_ptr->next = new_node;
+        node_ptr = new_node;
+    }  
+    node_ptr->nesting = sublist;
 }
 
 void remove_list(struct Node *head) {
@@ -111,7 +118,9 @@ struct Node* tail(struct Node* head) {
 void traverse(struct Node* head) {
    struct Node* node_ptr = head;
     while (node_ptr != NULL) {
+        printf("%c\n", node_ptr->symbol);
         if(node_ptr->nesting != NULL){
+            printf("-- nesting --\n");
             traverse(node_ptr->nesting);
         }
         node_ptr = node_ptr->next;
@@ -119,8 +128,10 @@ void traverse(struct Node* head) {
 }
 
 int main(void) {
-    char expr[] = "(*a (b+c))";
+    char expr[] = "(+ (* a (+ b c)) (*d (/ e f)))";
+    // char expr[] = "(+ a (* b (+ c d)))"; 
     int x = 0; 
     struct Node* head = create_list(expr, &x, false);
+    traverse(head);
     remove_list(head);
 }
