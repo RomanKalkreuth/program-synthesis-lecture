@@ -1,15 +1,15 @@
 import random
 import copy
 
-from src.operators import subtree_mutation, subtree_crossover
-from src.tree import random_tree, size
+from src.program_synthesis.operators import subtree_mutation, subtree_crossover
+from src.program_synthesis.tree import random_tree, size
 
 def one_plus_lambda(problem, config, hyperparameters):
 
     parent = random_tree(config.max_tree_depth)
     best_fitness = problem.evaluate(parent)
 
-    for generation in range(config.max_generations):
+    for generation in range(config.num_generations):
         for _ in range(hyperparameters.lambda_):
             offspring = copy.deepcopy(parent)
             subtree_mutation(offspring, config.subtree_depth)
