@@ -1,6 +1,6 @@
 import gymnasium as gym
 from gymnasium.wrappers import FlattenObservation
-from src.algorithms import one_plus_lambda
+from src.algorithms import mu_plus_lambda
 from src.configuration import Config, Hyperparameters, Algorithm
 from src.gp import GeneticProgramming
 from src.tree import *
@@ -14,13 +14,13 @@ NUM_INPUTS = wrapped_env.observation_space.shape[0]
 
 evaluator = evaluate_tree
 comparator = operator.ge
+algorithm = mu_plus_lambda
 problem = PolicySearch(env=env, ideal_=100, evaluator_=evaluator)
 functions = [ADD, SUB, MUL, DIV, LOG10, MOD, FLOOR, CEIL, AND, OR,
              NAND, NOR, NOT, LT, LTE, GT, GTE, EQ, MIN, MAX, NEG]
 terminals = ["x" + str(i) for i in range(NUM_INPUTS)]
 terminals += [0, 1, 2, math.pi, math.e]
 variables = get_variables_from_terminals(terminals)
-algorithm = one_plus_lambda
 ideal = 500
 solution = None
 
@@ -40,17 +40,17 @@ config = Config(
     num_terminals=len(terminals),
     num_variables=len(variables),
     comparator=comparator,
-    evaluator = evaluator,
-    algorithm=Algorithm.MU_PLUS_LAMBDA,
+    evaluator=evaluator,
+    algorithm=algorithm,
     report_interval=1
 )
 
 hyperparameters = Hyperparameters(
-    mu=10,
-    lambda_=10,
-    crossover_rate=0.7,
-    mutation_rate=0.05
+    mu=8,
+    lambda_=128,
+    crossover_rate=0.5,
+    mutation_rate=0.1
 )
 
 GeneticProgramming.config = config
-#GeneticProgramming.evolve(algorithm, config, hyperparameters, problem)
+GeneticProgramming.evolve(algorithm, config, hyperparameters, problem)

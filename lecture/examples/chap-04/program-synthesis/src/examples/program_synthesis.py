@@ -1,19 +1,20 @@
 from src import util
+from src.examples.policy_search import algorithm
 from src.tree import *
 from src.configuration import *
 import src.benchmarks.leetcode.power_of_two as power_of_two
 from src.problems import SynthesisProblem
 from src.gp import GeneticProgramming
-from src.algorithms import one_plus_lambda
+from src.algorithms import mu_plus_lambda
 
 training_data = power_of_two.generate_dataset(n=20, m=300)
 
 evaluator = evaluate_tree
+algorithm = mu_plus_lambda
+comparator = operator.ge
 functions = [ADD, SUB, MUL, DIV, LOG10, MOD, FLOOR, CEIL, AND, OR, NAND, NOR, NOT, LT, LTE, GT, GTE, EQ, MIN, MAX, NEG]
 terminals = (['x'])
 #terminals += [0, 1, 2, math.pi, math.e]
-comparator = operator.ge
-algorithm = one_plus_lambda
 ideal = len(training_data)
 problem = SynthesisProblem(dataset_=training_data, evaluator_=evaluator)
 solution = None
@@ -35,7 +36,7 @@ config = Config(
     num_variables=len(terminals),
     comparator=comparator,
     evaluator =evaluator,
-    algorithm=Algorithm.MU_PLUS_LAMBDA,
+    algorithm=algorithm,
     report_interval=10
 )
 
