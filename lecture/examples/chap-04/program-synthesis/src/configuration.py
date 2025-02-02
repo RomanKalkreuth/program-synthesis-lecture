@@ -26,7 +26,7 @@ MINIMIZING = False
 @dataclass
 class Config:
     num_jobs: int
-    max_generations: int
+    num_generations: int
     minimizing: bool
     ideal_fitness: float
     tree_init_depth: tuple
