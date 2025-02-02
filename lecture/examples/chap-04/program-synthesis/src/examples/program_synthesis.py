@@ -20,7 +20,7 @@ solution = None
 
 config = Config(
     num_jobs=1,
-    max_generations=10000,
+    num_generations=10000,
     minimizing=False,
     ideal_fitness=100,
     tree_init_depth=(2, 4),
