@@ -1,8 +1,8 @@
 import random
 import copy
 
-from src.program_synthesis.operators import subtree_mutation, subtree_crossover
-from src.program_synthesis.tree import random_tree, size
+from src.operators import subtree_mutation, subtree_crossover
+from src.tree import random_tree, size
 
 def one_plus_lambda(problem, config, hyperparameters):
 
