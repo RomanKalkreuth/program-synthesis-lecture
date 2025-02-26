@@ -2,7 +2,9 @@
 
 ## Overview
 
-The lecture "Introduction to Program Synthesis" covers its historical background, fundamentals and state-of-the-art methods used for program synthesis. It first sketches the historical background of computer programs and program synthesis, introduces the most fundamental dogmas prevalent in program synthesis, and covers the core basics of machine learning and optimization. The lecture then focuses on the fundamental understanding of basic (traditional) methods and concepts that have been proposed over time. The last part of the lecture addresses modern techniques that are based on contemporary machine learning and optimization concepts and are used for state-of-the-art applications. A video on the lecture is available here.
+The lecture "Introduction to Program Synthesis" covers its historical background, fundamentals and state-of-the-art methods used for program synthesis. It first sketches the historical background of computer programs and program synthesis, introduces the most fundamental dogmas prevalent in program synthesis, and covers the core basics of machine learning and optimization. The lecture then focuses on the fundamental understanding of basic (traditional) methods and concepts that have been proposed over time. The last part of the lecture addresses modern techniques that are based on contemporary machine learning and optimization concepts and are used for state-of-the-art applications. A video on the lecture is available here:
+
+[https://www.youtube.com/watch?v=JQTMK6P26rs](https://www.youtube.com/watch?v=JQTMK6P26rs)
 
 The scope of the lecture therefore combines a fundamental and formal understanding of computer programs in general, basic and traditional concepts that have been used in program synthesis, as well as modern (state-of-the-art) methods.
 
