@@ -20,7 +20,8 @@ The working language is English.
 ## Organisers
 
 Prof. Dr. Holger H. Hoos - Chair Holder, Alexander von Humboldt Professor
-Dr. Roman Kalkreuth Assistant Professor (Akademischer Rat)
+
+Dr. Roman Kalkreuth - Assistant Professor (Akademischer Rat)
 
 
 ## Contact
