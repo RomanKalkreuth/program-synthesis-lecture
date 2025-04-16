@@ -17,6 +17,8 @@ Lecture outline:
 
 The lectures will take place at the Chair for Artificial Intelligence Methodology (Theaterstr. 35-39, room 325), on Wednesdays 12:30-14:00.
 
+The exercises will take place on Thursdays 10:30-12:00 or 12:30-14:00.
+
 The working language is English.
 
 ## Organisers
