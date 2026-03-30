@@ -1,4 +1,4 @@
-# Introduction to Program Synthesis, Summer Term 2025
+# Introduction to Program Synthesis, Summer Term 2026
 
 ## Overview
 
