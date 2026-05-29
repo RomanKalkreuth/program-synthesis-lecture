@@ -1,6 +1,10 @@
 """
 Implementation of the direct "algorithmic" proof
 for adding two odd numbers in chapter 01-02.
+
+Introduction to Program Synthesis Course
+Chair for AI Methodology (AIM)
+Faculty of Computer Science, RWTH Aachen University
 """
 
 from dataclasses import dataclass
@@ -36,10 +40,10 @@ class Even(Number):
     """
     Even number defined as 2x
     """
-    def __init__(self, term):
+    def __init__(self, value):
         self.coefficient = 2
         self.constant = 0
-        self.term = term
+        self.term = value / 2
 
 def add_odds(a: Odd, b: Odd) -> Even:
     """
@@ -57,12 +61,12 @@ def add_odds(a: Odd, b: Odd) -> Even:
 
     # Calculate (x + y + 1)
     n = a.term + b.term + 1
-    return Even(n)
+    return Even(2*n)
 
 
 def main():
-    a = Odd(3)
-    b = Odd(15)
+    a = Odd(7)
+    b = Odd(3)
     result = add_odds(a, b)
     print(result)
 

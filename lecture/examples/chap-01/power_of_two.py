@@ -1,3 +1,11 @@
+"""
+Implementation of the verification for the power of two inequality.
+
+Introduction to Program Synthesis Course
+Chair for AI Methodology (AIM)
+Faculty of Computer Science, RWTH Aachen University
+"""
+
 import sys
 import time
 
