@@ -1,10 +1,21 @@
+"""
+Simple example of a computational graph represented with a adjacency list
+addressed in chapter 2.2.
+
+Introduction to Program Synthesis Course
+Chair for AI Methodology (AIM)
+Faculty of Computer Science, RWTH Aachen University
+"""
+
+
 import copy
 import random
 from abc import abstractmethod, ABC
 from dataclasses import dataclass, field
-from config import GraphConfig
-from src.chap02.functions import ADD, MUL, SUB, DIV
-from symbols import Symbol, Var, Const
+from src.config import GraphConfig
+from src.functions import ADD, MUL, SUB, DIV
+from src.symbol import Symbol, Var, Const
+
 
 @dataclass
 class Vertex:
@@ -16,7 +27,7 @@ class Vertex:
 class Graph(ABC):
 
     @abstractmethod
-    def init(self):
+    def reset(self):
         pass
 
     @abstractmethod
@@ -66,6 +77,24 @@ class AdjacencyList(ComputationalGraph):
         self._sources = []
         self._paths = []
         self._config = config_
+
+        self.reset()
+
+
+    def reset(self):
+        num_nodes = random.randint(self._config.min_nodes, self._config.max_nodes)
+        for i in range(num_nodes):
+            if random.random() > self._config.symbol_ratio:
+                rand_symbol = random.choice(self._config.non_terminals)
+            else:
+                rand_symbol = random.choice(self._config.terminals)
+            self.add_vertex(rand_symbol)
+
+        for i in range(self._config.num_outputs):
+            rand_vertex = random.randint(0, len(self._vertices) - 1)
+            self._sinks.append(rand_vertex)
+            path = self.path(rand_vertex)
+            self._paths.append(path)
 
     def add_vertex(self, symbol):
         self._vertices.append(symbol)
@@ -138,6 +167,34 @@ class AdjacencyList(ComputationalGraph):
             path[vertex] = []
         return path
 
+    def predict(self, observation):
+
+        def predict_path(path: dict, observation: list, vertex: int):
+            symbol = self._vertices[vertex]
+
+            if isinstance(symbol, Var):
+                return observation[symbol()]
+            elif isinstance(symbol, Const):
+                return symbol()
+            else:
+                edges = path[vertex]
+                args = []
+                for edge in edges:
+                    args.append(predict_path(path, observation, edge))
+                return symbol(*args)
+
+        if self._paths is None:
+            self.decode()
+
+        predictions = []
+
+        for i, path in enumerate(self._paths):
+            sink = self._sinks[i]
+            prediction = predict_path(path, observation, sink)
+            predictions.append(prediction)
+
+        return predictions
+
     def print_vertices(self):
         print("Vertices: ")
         for index, label in enumerate(self._vertices):
@@ -184,61 +241,13 @@ class AdjacencyList(ComputationalGraph):
         return self._edges
 
 
-class SymbolicGraph(AdjacencyList):
+if __name__ == "__main__":
 
-    def __init__(self, config_: GraphConfig):
-        super().__init__(config_)
-        self.init()
+    functions = [ADD, MUL, SUB, DIV]
+    terminals = [Const("c0", 0), Const("c1", 1),
+                 Var("v0", 0), Var("v1", 1)]
 
-    def init(self):
-        num_nodes = random.randint(self._config.min_nodes, self._config.max_nodes)
-
-        for i in range(num_nodes):
-            if random.random() > self._config.symbol_ratio:
-                rand_symbol = random.choice(self._config.non_terminals)
-            else:
-                rand_symbol = random.choice(self._config.terminals)
-            self.add_vertex(rand_symbol)
-
-        for i in range(self._config.num_outputs):
-            rand_vertex = random.randint(0, len(self._vertices) - 1)
-            self._sinks.append(rand_vertex)
-            path = self.path(rand_vertex)
-            self._paths.append(path)
-
-    def predict(self, observation):
-
-        def predict_path(path: dict, observation: list, vertex: int):
-            symbol = self._vertices[vertex]
-
-            if isinstance(symbol, Var):
-                return observation[symbol()]
-            elif isinstance(symbol, Const):
-                return symbol()
-            else:
-                edges = path[vertex]
-                args = []
-                for edge in edges:
-                    args.append(predict_path(path, observation, edge))
-                return symbol(*args)
-
-        if self._paths is None:
-            self.decode()
-
-        predictions = []
-
-        for i, path in enumerate(self._paths):
-            sink = self._sinks[i]
-            prediction = predict_path(path, observation, sink)
-            predictions.append(prediction)
-
-        return predictions
-
-functions = [ADD, MUL, SUB, DIV]
-terminals = [Const("c0", 0), Const("c1", 1),
-             Var("v0", 0), Var("v1", 1)]
-
-graph_config = GraphConfig(non_terminals=functions,
+    graph_config = GraphConfig(non_terminals=functions,
                           terminals=terminals,
                           operators=None,
                           min_nodes=10,
@@ -246,4 +255,4 @@ graph_config = GraphConfig(non_terminals=functions,
                           num_inputs=2,
                           num_outputs=3)
 
-SymbolicGraph(config_=graph_config)
+    AdjacencyList(config_=graph_config)

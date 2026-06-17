@@ -1,3 +1,11 @@
+"""
+Simple example of a computational tree addressed in chapter 2.1
+
+Introduction to Program Synthesis Course
+Chair for AI Methodology (AIM)
+Faculty of Computer Science, RWTH Aachen University
+"""
+
 from __future__ import annotations
 from dataclasses import dataclass
 

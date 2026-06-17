@@ -1,7 +1,7 @@
 import operator
 from abc import ABC
 from dataclasses import dataclass
-from symbols import Function, Terminal
+from symbol import Function, Terminal
 
 @dataclass
 class GPHyperparameters:

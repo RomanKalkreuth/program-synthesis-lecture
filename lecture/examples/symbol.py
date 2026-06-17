@@ -7,7 +7,6 @@ class Symbol(ABC):
     name: str
     type: str
     symbol: callable
-    arity: int = None
 
     def __init__(self, name_):
         self.name = name_
@@ -18,9 +17,10 @@ class Symbol(ABC):
 
 @dataclass
 class Function(Symbol):
-    def __init__(self, arity_, name_, function_):
+    arity: int
+    def __init__(self, func_, arity_ = 2, name_ =""):
         Symbol.__init__(self, name_)
-        self.symbol = function_
+        self.symbol = func_
         self.arity = arity_
 
     def __call__(self, *args) -> Any:
