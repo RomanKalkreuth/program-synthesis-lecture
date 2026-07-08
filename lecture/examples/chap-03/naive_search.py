@@ -1,5 +1,5 @@
 """
-Naive search examples that complement the naive search methods presented in chapter 3.
+Naive search test that complement the naive search methods presented in chapter 3.
 
 Introduction to Program Synthesis Course
 Chair for AI Methodology (AIM)

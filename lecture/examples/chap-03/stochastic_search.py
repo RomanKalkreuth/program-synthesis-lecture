@@ -5,7 +5,7 @@ import numpy as np
 
 from src.benchmark import SRBenchmark
 from src.chap03.tree import Node, evaluate_tree
-from src.functions import ADD, SUB, MUL, DIV
+from src.functions import ADD, SUB, MUL
 from src.problem import BlackBox
 from src.loss import Loss
 from src.symbol import Var, Const
