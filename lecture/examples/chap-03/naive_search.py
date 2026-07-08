@@ -11,8 +11,8 @@ from enum import IntEnum
 import numpy as np
 from src import symbol
 from src.chap03.tree import Node
-from src.loss import absolute_error
-from src.problem import BlackBoxProblem
+from src.loss import Loss
+from src.problem import BlackBox
 from src.symbol import Var, Const, Function
 
 
@@ -86,7 +86,7 @@ def sample_tree(max_depth: int, non_terminals: list, terminals: list, node: Node
     return node
 
 
-def enumerative_search(problem: BlackBoxProblem, non_terminals: list, terminals: list, comparator: operator,
+def enumerative_search(problem: BlackBox, non_terminals: list, terminals: list, comparator: operator,
                        ideal: float, max_depth: int, depth=0, best=None, root=None, current=None) -> Node:
     """
     Naive enumerative search algorithm that searches for solutions recursively.
@@ -133,12 +133,13 @@ def enumerative_search(problem: BlackBoxProblem, non_terminals: list, terminals:
         return best
 
 
-def random_walk(problem: BlackBoxProblem, non_terminals: list, terminals: list, max_iter: int, num_trials: int,
+def random_walk(problem: BlackBox, non_terminals: list, terminals: list, max_iter: int, num_trials: int,
                 comparator: operator,
                 ideal: float,
                 max_depth,
                 report_iter=True,
-                report_trial=True
+                report_trial=True,
+                report_interval=100
                 ) -> Node:
     """
     Simple random walk algorithm that is performed in an iterative fashion.
@@ -160,7 +161,7 @@ def random_walk(problem: BlackBoxProblem, non_terminals: list, terminals: list, 
         for iter in range(max_iter):
             depth = np.random.randint(1, max_depth)
             next = sample_tree(depth, non_terminals, terminals)
-            cost = problem.evaluate(next)
+            cost = problem.evaluate(next, non_terminals, terminals)
             candidate = (next, cost)
             if best is None:
                 best = candidate
@@ -170,14 +171,15 @@ def random_walk(problem: BlackBoxProblem, non_terminals: list, terminals: list, 
             elif comparator(candidate[1], best[1]):
                 best = candidate
             if report_iter:
-                print("Iteration #" + str(iter) + " Best cost: " + str(best[1]))
+                if iter % report_interval == 0:
+                    print("Iteration #" + str(iter) + " Best cost: " + str(best[1]))
         if report_trial:
             print("Trial #" + str(trial) + " - Best cost: " + str(best[1]))
     return best[0]
 
 
 if __name__ == "__main__":
-    MAX_ITER = 10
+    MAX_ITER = 10000
     NUM_TRIALS = 1
     IDEAL = 0.01
     MAX_DEPTH = 8
@@ -185,23 +187,24 @@ if __name__ == "__main__":
     ALGORITHM = Algorithm.RANDOM_WALK
 
     non_terminals = [Function(func_=operator.add, arity_=2, name_="add"),
-                     Function(func_=operator.mul, arity_=2, name_="mul")]
+                     Function(func_=operator.mul, arity_=2, name_="mul"),
+                     Function(func_=operator.mul, arity_=2, name_="sub")]
     terminals = [Var("x", 0),
                  Const(name_="one", value=1)]
 
     f = lambda x: x ** 3 + x ** 2 + x
 
-    X = np.linspace(-10.0, 10.0, 50)
+    X = np.linspace(-1.0, 1.0, 20)
     y = np.array([f(x) for x in X])
 
-    loss = absolute_error
+    loss = Loss.absolute_error
     evaluator = evaluate_tree
     comparator = operator.lt
 
-    problem = BlackBoxProblem(X_=X,
-                              y_=y,
-                              loss_=loss,
-                              evaluator_=evaluator)
+    problem = BlackBox(X_=X,
+                       y_=y,
+                       loss_=loss,
+                       evaluator_=evaluator)
 
     if ALGORITHM == Algorithm.RANDOM_WALK:
         best = random_walk(problem=problem,

@@ -18,7 +18,7 @@ class Symbol(ABC):
 @dataclass
 class Function(Symbol):
     arity: int
-    def __init__(self, func_, arity_ = 2, name_ =""):
+    def __init__(self,arity_, name_, func_):
         Symbol.__init__(self, name_)
         self.symbol = func_
         self.arity = arity_

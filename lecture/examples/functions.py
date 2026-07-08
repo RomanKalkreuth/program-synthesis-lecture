@@ -1,6 +1,6 @@
 import math
 import operator
-from symbol import Function
+from src.symbol import Function
 
 def f2b(input: float) -> bool:
     """
